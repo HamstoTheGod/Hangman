@@ -61,15 +61,18 @@ class vindue(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.ENTER:
 
-            if len(self.input_text) > 1:
-                self.input_text_ift_coop = self.input_text.upper()
-            if len(self.input_text) == 1:
-                self.input_text_ift_coop = self.input_text.upper()
+            self.input_text_ift_coop = self.input_text.upper()
 
-            if self.input_text_ift_coop not in self.levels_obj.tilfældigt_ord:
+
+            if len(self.input_text_ift_coop) == 1 and self.input_text_ift_coop not in self.levels_obj.tilfældigt_ord:
                 print("Forket gæt")
                 self.liv -= 1
                 print(f"liv tilbage {self.liv}")
+            if len(self.input_text_ift_coop) > 1 and self.input_text_ift_coop != self.levels_obj.tilfældigt_ord:
+                print("Forket gæt")
+                self.liv -= 1
+                print(f"liv tilbage {self.liv}")
+
             for i, bogstav in enumerate(self.levels_obj.tilfældigt_ord):
                 if bogstav == self.input_text_ift_coop:
                     print(f"dit gæt {bogstav}")
@@ -81,15 +84,12 @@ class vindue(arcade.Window):
         elif key == arcade.key.BACKSPACE:
             self.input_text = self.input_text[:-1]
         else:
-            # vi tryer siden hvis vi ikke tryer kan det generere en error hvis karakteren er fra numpaten (måske også handre steder der var bare der jeg lagde mærke til det)
+            # vi tryer siden hvis vi ikke tryer kan det generere en error hvis karakteren er fra numpaten (måske også andre steder der var bare der jeg lagde mærke til det)
             try:
                 self.input_text += chr(key)
             except:
                 pass
             return self.input_text_ift_coop
-
-
-
 
     def update(self, delta_time):
         pass
@@ -101,7 +101,6 @@ class levels:
         self.synonyms = []
 
     def hent_tilfældigt_ord(self, ordlevel):
-        self.__init__()
         while len(self.tilfældigt_ord) != ordlevel or len(set(self.synonyms)) < 8 or len(set(self.synonyms)) > 12:
             self.tilfældigt_ord = random.choice(self.ordliste).upper()
             self.synonyms = []
