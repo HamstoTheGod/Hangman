@@ -17,10 +17,12 @@ class vindue(arcade.Window):
         self.levels_obj = levels()
         self.spillerinterface_obj = spillerinterface(self.levels_obj, 5)
         self.input_text = ''
-        self.liv = 5
-        self.startliv = self.liv
+
         self.input_text_ift_coop = ''
-        self.listeAfMennesket = [(285, 530, 20, arcade.color.BLACK, 5)]
+        self.listeAfMennesket = [(1, 285, 530, 20, arcade.color.BLACK, 5), (1, 277.5, 535, 5, arcade.color.BLACK, 5), (1, 292.5, 535, 5, arcade.color.BLACK,5), (3, 285, 520, 10,20, arcade.color.BLACK, 0,180,5), (2, 285, 510, 285, 450, arcade.color.BLACK, 5), (2, 285, 485, 240, 510, arcade.color.BLACK, 5), (2, 285, 485, 330, 510, arcade.color.BLACK, 5), (2, 285, 455, 330, 400, arcade.color.BLACK, 5), (2, 285, 455, 240, 400, arcade.color.BLACK, 5)]
+        self.liv = len(self.listeAfMennesket)
+        self.startliv = self.liv
+
 
     def setup(self):
         self.spillerinterface_obj.hangmantekst()
@@ -33,13 +35,22 @@ class vindue(arcade.Window):
         arcade.draw_line(150, 550, 200, 600, arcade.color.BLACK, 10)
         arcade.draw_line(285, 600, 285, 550, arcade.color.BLACK, 5)
         #
+        for i in range(self.startliv-self.liv):
+            if i < len(self.listeAfMennesket):
+                self.kropsdel=self.listeAfMennesket[i]
+                if self.kropsdel[0] == 1:  # Hvis det første element er 1
+                    arcade.draw_circle_outline(*self.kropsdel[1:])
+                elif self.kropsdel[0] == 2:
+                    arcade.draw_line(*self.kropsdel[1:])
+                elif self.kropsdel[0] == 3:
+                    arcade.draw_arc_outline(*self.kropsdel[1:])
+
+
         arcade.draw_text("Guess a letter:", 100, 100, arcade.color.BLACK, 20)
         arcade.draw_text(self.input_text, 300, 100, arcade.color.BLACK, 12)
         arcade.draw_text(" ".join(self.spillerinterface_obj.ordlængde), 300, 300, arcade.color.BLACK, 20)
         arcade.draw_text(self.levels_obj.visuelesynonymer, 100, 150, arcade.color.BLACK, 10)
         arcade.draw_text(self.levels_obj.tilfældigt_ord, 400, 150, arcade.color.BLACK, 30)
-        for i in self.listeAfMennesket:
-            arcade.draw_circle_outline(*i)
 
         if self.input_text_ift_coop == self.levels_obj.tilfældigt_ord or "".join(self.spillerinterface_obj.ordlængde) == self.levels_obj.tilfældigt_ord:
             arcade.draw_text(f"TILLYKKE DU HAR VUNNDDETTTT HANGMAN!!! ORDET VAR {self.levels_obj.tilfældigt_ord}", 0,500, arcade.color.BLACK, 10)
